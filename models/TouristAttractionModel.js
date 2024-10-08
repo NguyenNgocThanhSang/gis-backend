@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { TOURIST_ATTRACTION_STATUS } from "../utils/constants.js";
 
 const TouristAtracttionSchema = new mongoose.Schema(
   {
@@ -16,8 +17,8 @@ const TouristAtracttionSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["open", "closed"],
-      default: "open",
+      enum: Object.values(TOURIST_ATTRACTION_STATUS),
+      default: TOURIST_ATTRACTION_STATUS.OPEN,
     },
     type: {
       type: mongoose.Schema.ObjectId,
@@ -30,6 +31,9 @@ const TouristAtracttionSchema = new mongoose.Schema(
         ref: "Category",
       },
     ],
+    imageUrl: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

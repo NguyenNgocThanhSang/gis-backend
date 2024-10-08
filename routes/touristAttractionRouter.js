@@ -8,12 +8,23 @@ import {
   updateTouristAttraction,
   deleteTouristAttraction,
 } from "../controllers/touristAttractionController.js";
+import {
+  validateTouristAttractionInput,
+  validateIdParam,
+} from "../middleware/validationMiddleware.js";
 
-router.route("/").get(getAllTouristAttractions).post(createTouristAttraction);
+router
+  .route("/")
+  .get(getAllTouristAttractions)
+  .post(validateTouristAttractionInput, createTouristAttraction);
 router
   .route("/:id")
-  .get(getTouristAttraction)
-  .patch(updateTouristAttraction)
-  .delete(deleteTouristAttraction);
+  .get(validateIdParam, getTouristAttraction)
+  .patch(
+    validateTouristAttractionInput,
+    validateIdParam,
+    updateTouristAttraction
+  )
+  .delete(validateIdParam, deleteTouristAttraction);
 
 export default router;

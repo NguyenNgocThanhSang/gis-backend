@@ -8,12 +8,19 @@ import {
   updateCategory,
   deleteCategory,
 } from "../controllers/categoryController.js";
+import {
+  validateCategoryInput,
+  validateIdParam,
+} from "../middleware/validationMiddleware.js";
 
-router.route("/").get(getAllCategories).post(createCategory);
+router
+  .route("/")
+  .get(getAllCategories)
+  .post(validateCategoryInput, createCategory);
 router
   .route("/:id")
-  .get(getCategory)
-  .patch(updateCategory)
-  .delete(deleteCategory);
+  .get(validateIdParam, getCategory)
+  .patch(validateCategoryInput, validateIdParam, updateCategory)
+  .delete(validateIdParam, deleteCategory);
 
 export default router;
