@@ -11,20 +11,34 @@ import {
 import {
   validateTouristAttractionInput,
   validateIdParam,
+  validateAdmin,
 } from "../middleware/validationMiddleware.js";
+import { authenticateUser } from "../middleware/authMiddleware.js";
 
 router
   .route("/")
   .get(getAllTouristAttractions)
-  .post(validateTouristAttractionInput, createTouristAttraction);
+  .post(
+    authenticateUser,
+    validateAdmin,
+    validateTouristAttractionInput,
+    createTouristAttraction
+  );
 router
   .route("/:id")
   .get(validateIdParam, getTouristAttraction)
   .patch(
+    authenticateUser,
+    validateAdmin,
     validateTouristAttractionInput,
     validateIdParam,
     updateTouristAttraction
   )
-  .delete(validateIdParam, deleteTouristAttraction);
+  .delete(
+    authenticateUser,
+    validateAdmin,
+    validateIdParam,
+    deleteTouristAttraction
+  );
 
 export default router;
