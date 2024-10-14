@@ -24,7 +24,9 @@ const withValidationErrors = (validateValues) => {
 export const validateTouristAttractionInput = withValidationErrors([
   body("name").notEmpty().withMessage("name is required"),
   body("description").notEmpty().withMessage("description is required"),
-  body("location").notEmpty().withMessage("location is required"),
+  body("address").notEmpty().withMessage("address is required"),
+  body("coordinates.latitude").notEmpty().withMessage("latitude is required"),
+  body("coordinates.longitude").notEmpty().withMessage("longitude is required"),
   body("status")
     .isIn(Object.values(TOURIST_ATTRACTION_STATUS))
     .withMessage("invalid status value"),

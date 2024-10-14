@@ -21,6 +21,12 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user",
   },
+  locationBookmarks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "TouristAttraction",
+    },
+  ],
 });
 
 UserSchema.methods.toJSON = function () {

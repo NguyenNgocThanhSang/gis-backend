@@ -9,8 +9,16 @@ const TouristAtracttionSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    location: {
+    address: {
       type: String,
+    },
+    coordinates: {
+      latitude: {
+        type: Number,
+      },
+      longitude: {
+        type: Number,
+      },
     },
     phoneNumber: {
       type: String,
