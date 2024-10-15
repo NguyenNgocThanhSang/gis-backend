@@ -3,7 +3,9 @@ import { StatusCodes } from "http-status-codes";
 import { NotFoundError } from "../errors/customErrors.js";
 
 export const getAllTouristAttractions = async (req, res) => {
-  const touristAttractions = await TouristAttraction.find({});
+  const touristAttractions = await TouristAttraction.find({})
+    .populate("type")
+    .populate("category");
   res.status(StatusCodes.OK).json({ touristAttractions });
 };
 
