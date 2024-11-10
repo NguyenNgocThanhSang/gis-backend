@@ -1,5 +1,21 @@
 import { StatusCodes } from "http-status-codes";
 import User from "../models/UserModel.js";
+import TouristAttraction from "../models/TouristAttractionModel.js";
+import { NotFoundError } from "../errors/customErrors.js";
+
+export const getAllUsers = async (req, res) => {
+  const users = await User.find({});
+  res.status(StatusCodes.OK).json({ users });
+};
+
+export const getUser = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    throw new NotFoundError(`no user with id ${id}`);
+  }
+  res.status(StatusCodes.OK).json({ user });
+};
 
 export const getCurrentUser = async (req, res) => {
   const user = await User.findOne({ _id: req.user.userId });
@@ -9,7 +25,8 @@ export const getCurrentUser = async (req, res) => {
 
 export const getApplicationStats = async (req, res) => {
   const users = await User.countDocuments();
-  res.status(StatusCodes.OK).json({ users });
+  const touristAttractions = await TouristAttraction.countDocuments();
+  res.status(StatusCodes.OK).json({ users, touristAttractions });
 };
 
 export const updateUser = async (req, res) => {

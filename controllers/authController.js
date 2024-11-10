@@ -3,6 +3,7 @@ import User from "../models/UserModel.js";
 import { comparePassword, hashPassword } from "../utils/passwordUtils.js";
 import { UnauthenticatedError } from "../errors/customErrors.js";
 import { createJWT } from "../utils/tokenUtils.js";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   const isFirstAccount = (await User.countDocuments()) === 0;
@@ -38,4 +39,17 @@ export const logout = (req, res) => {
     expires: new Date(Date.now()),
   });
   res.status(StatusCodes.OK).json({ msg: "user logged out" });
+};
+
+export const validateToken = (req, res) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(StatusCodes.OK).json({ isAuthenticated: false });
+  }
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(StatusCodes.OK).json({ isAuthenticated: false });
+    }
+  });
+  res.status(StatusCodes.OK).json({ isAuthenticated: true });
 };
