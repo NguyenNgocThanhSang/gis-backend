@@ -7,6 +7,7 @@ import {
   getTouristAttraction,
   updateTouristAttraction,
   deleteTouristAttraction,
+  addLocationToBookmark,
 } from "../controllers/touristAttractionController.js";
 import {
   validateTouristAttractionInput,
@@ -24,6 +25,9 @@ router
     validateTouristAttractionInput,
     createTouristAttraction
   );
+router
+  .route("/addLocationToBookmark")
+  .post(authenticateUser, addLocationToBookmark);
 router
   .route("/:id")
   .get(validateIdParam, getTouristAttraction)

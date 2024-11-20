@@ -10,7 +10,7 @@ export const getAllUsers = async (req, res) => {
 
 export const getUser = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id);
+  const user = await User.findById(id).populate("locationBookmarks");
   if (!user) {
     throw new NotFoundError(`no user with id ${id}`);
   }
@@ -18,7 +18,9 @@ export const getUser = async (req, res) => {
 };
 
 export const getCurrentUser = async (req, res) => {
-  const user = await User.findOne({ _id: req.user.userId });
+  const user = await User.findOne({ _id: req.user.userId }).populate(
+    "locationBookmarks"
+  );
   const userWithoutPassword = user.toJSON();
   res.status(StatusCodes.OK).json({ user: userWithoutPassword });
 };

@@ -1,4 +1,5 @@
 import TouristAttraction from "../models/TouristAttractionModel.js";
+import User from "../models/UserModel.js";
 import { StatusCodes } from "http-status-codes";
 import { NotFoundError } from "../errors/customErrors.js";
 
@@ -54,5 +55,32 @@ export const deleteTouristAttraction = async (req, res) => {
   res.status(StatusCodes.OK).json({
     msg: "tourist attraction deleted",
     touristAttraction: removedTouristAttraction,
+  });
+};
+
+export const addLocationToBookmark = async (req, res) => {
+  const { id } = req.body;
+  const touristAttraction = await TouristAttraction.findById(id);
+  if (!touristAttraction) {
+    throw new NotFoundError(`no tourist attraction with id ${id}`);
+  }
+
+  let user = await User.findOne({ _id: req.user.userId });
+  if (
+    user.locationBookmarks.find(
+      (locationId) => locationId.toString() === touristAttraction._id.toString()
+    )
+  ) {
+    const index = user.locationBookmarks.indexOf(touristAttraction._id);
+    if (index > -1) {
+      user.locationBookmarks.splice(index, 1);
+    }
+  } else {
+    user.locationBookmarks.push(touristAttraction._id);
+  }
+
+  await user.save();
+  res.status(StatusCodes.OK).json({
+    locationBookmarks: user.locationBookmarks,
   });
 };
